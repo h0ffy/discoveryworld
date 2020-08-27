@@ -9,7 +9,8 @@ Aplicacion de descubrimiento y analisis de maquinas de internet
 
 
 
-daemon:
+*daemon:
+	
 	*features:
 		*	IPV4
 		*	Adquisition IPV4 random IP and file list input
@@ -45,7 +46,7 @@ daemon:
 		*	Connection over jennyproxy
 
 
-agent:
+*agent:
 	*features:
 		*	Socket listen
 		*	Save into MySQL database
