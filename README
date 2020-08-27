@@ -10,6 +10,7 @@ Application to internet machines discovery and analysis
 
 
 *daemon:
+
 	*features:
 		*	IPV4
 		*	Adquisition IPV4 random IP and file list input
