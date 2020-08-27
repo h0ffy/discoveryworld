@@ -1,16 +1,15 @@
-Aplicacion de descubrimiento y analisis de maquinas de internet
+Application to internet machines discovery and analysis
 
 
-	/daemon: Demonio en C para el descubrimiento, fingerprint y portscan
-	/framework: Scripts en python para la extracción de dominios y otras utilidades de la aplicacion
-	/web: Entorno web PHP/HTML/JavaScript para la visualización de la informacion
-	db.txt: Informacion sobre la estructura de la base de datos
+	/daemon: Daemon to discovery, fingerprint and portscan
+	/framework: Scripts en python for domain extraction and other tools
+	/web: Web DashBoard
+	db.txt: DataBase scheme
 
 
 
 
 *daemon:
-	
 	*features:
 		*	IPV4
 		*	Adquisition IPV4 random IP and file list input
