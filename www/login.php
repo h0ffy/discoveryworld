@@ -1,0 +1,89 @@
+<?php
+	require_once("mods/security.php");
+	require_once("mods/db.php");
+	
+	session_start();
+	if(isset($_SESSION['token']) && $_SESSION['token']!='')
+		header("Location:main.php");
+	
+	
+	$user = s_input($_POST['user']);
+	$pass = md5($_POST['pass']);
+	$is_invalid=false;	
+
+	$db = new db(0); 
+
+	if($db->is_valid_user($user)==false)
+		$is_invalid=true;
+	else {
+		if(($uid = $db->getUIDbyUser($user))==0)
+			$is_invalid=true;
+		else {
+			if($db->is_valid_pass($uid,$user,$pass)==false)
+				$is_invalid=true;
+			else {
+				if($db->is_session($uid))
+					header("Location:main.php");
+
+				$db->insertSession($uid);
+				header("Location:main.php");
+			}		
+	
+		}		
+	}
+
+		
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15">
+	<link href="./css/main.css" type="text/css" rel="stylesheet" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./css/w3.css">
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/search_result.css" type="text/css">
+	<link rel="stylesheet" href="./css/main_tables.css" type="text/css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/raphael-2.1.4.min.js"></script>
+	<script src="./js/justgage.js"></script>
+	<script src="./js/morris.min.js"></script>
+	<title>DiscoveryWorld</title>
+	
+</head>
+<body style="background-color:black;">
+	<div class="header">
+		<img id="jsec_img_head" src="img/logo001.jpg" alt="JennySec">
+	</div>
+
+	<div class="container">
+		<div class="result" id="result_main">
+			<div name="no_all" class="login-top">
+				<div class="w3-container skyblue7_back">
+					<h2>DiscoveryWorld</h2>
+				</div>	
+				<form action="login.php" method="post"  class="w3-container">
+					<?php
+						echo (	'<div class="w3-container w3-red">' 	.
+							'<h4>Error</h4>'			.
+  							'<p>Invalid login</p>'			.
+							'</div><br><br>');  
+					?>	
+				
+					<label class="w3-label skyblue7"><b>User</b></label>
+					<input class="w3-input w3-border w3-light-grey" type="text">
+					<label class="w3-label skyblue7"><b>Password</b></label>
+					<input class="w3-input w3-border w3-light-grey" type="text">
+					<button class="w3-btn w3-blue-grey">Login</button>
+				</form>		
+					
+			</div><!-- end of no_All-->
+		</div>
+	</div><!-- 	END CONTAINER	-->
+	
+	<div class="footer">
+		CopyLeft JennySec GPL (JennyCorp)
+	</div>
+</body>
+</html>

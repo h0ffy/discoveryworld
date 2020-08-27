@@ -1,0 +1,34 @@
+				DiscoveryWorld Professional Version
+				   @JennySec All Rights Reserved
+					www.jennysec.com 
+
+
+Modules:
+	- vuln_hearbleed	// Hearbleed vulnerable detection
+	- gather_dnsbrute	// DNS Bruteforcing
+	- gather_bingip		// Bing reverse IP gathering
+	- gather_nslookup	// Nslookup 
+	- gather_googlehack	// Google hacking
+	- gather_whois		// Whois
+	- gather_cms		// CMS detection	
+	- service_discovery 	// discovery this service with bruteforce or logic
+	- service_ssl 		// recovery ssl cert
+	- protocol_ssh 		// SSH 
+	- protocol_http		// HTTP (GPL)
+	- protocol_https	// HTTPS 
+	- protocol_smtp		// SMTP	
+	- protocol_smtps	// SMTPS
+	- IMAP/S
+	- Telnet
+	- XMPP/S
+	- FTP/SFTP
+	- TOR 		// w0w improvent
+	- P2P
+		- p2p_torrent
+		- p2p_emule
+		- p2p_ares
+	- IP2P
+	- PlayStation
+	- XBox	
+		
+

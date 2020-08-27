@@ -1,0 +1,57 @@
+
+
+login:
+	int id
+	varchar(20) user
+	varchar(32) password
+	date last_session
+	int session_status
+	varchar(32) token_id
+
+
+#targets:
+#	int(10) ID
+#	varchar(255) scan_id
+#	varchar(20) ip
+#	date time
+
+
+
+
+scan:
+	int(25) id
+	varchar(20) ip
+	varchar(2048) ports
+	varchar(3) geo
+	bool ping
+	varchar(65535) finger_21
+	varchar(65535) finger_22
+	varchar(65535) cert_22
+	varchar(65535) finger_23
+	varchar(65535) finger_25
+	varchar(65535) finger_80
+	varchar(65535) finger_443
+	varchar(65535) cert_443
+	bool framework_analysis
+	date last_scan
+
+#certs:
+#	int id
+#	varchar(20) ip
+#	longtext certs_22
+#	longtext certs_443
+
+hosts:
+	varchar(20) ip
+	longtext hosts
+		
+
+
+crawling:
+	int id
+	varchar(255) host
+	varchar(255) cms
+	longtext urls
+
+
+	

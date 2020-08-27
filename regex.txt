@@ -1,0 +1,10 @@
+//Extract URLS
+first = <ol\sid=\"b_results\">(.*)<\/ol>
+two (loop) = <a\shref=\"(\S+)\/\"
+
+
+
+//Extract Pages
+first = <li\sclass=\"b_pag\">(.*)<\/li>
+two (loop) = <a\shref=\"\S+\"\s\S+\">(\d)<\/a>
+

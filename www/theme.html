@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15">
+	<link href="./css/main.css" type="text/css" rel="stylesheet" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./css/w3.css">
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/search.css" type="text/css">
+	<link rel="stylesheet" href="./css/search_result.css" type="text/css">
+	<link rel="stylesheet" href="./css/search_tables.css" type="text/css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/raphael-2.1.4.min.js"></script>
+	<script src="./js/justgage.js"></script>
+	<script src="./js/morris.min.js"></script>
+	<title>DiscoveryWorld</title>
+	
+</head>
+<body>
+	<div class="header">
+		<div class="w3-right toptext w3-wide">
+			<span id="jsec_head">DiscoveryWorld</span><br />
+			<span style="color:white;">NETWORK DISCOVERY TOOL</span>
+		</div>
+			<!--<span id="jeco_head">Jenny</span><span id="jsec_sec">SEC</span>-->
+			<img id="jsec_img_head" src="img/logo001.jpg" alt="JennySec">
+			<!-- <span>Bienvenido a su cultivo <b>Dr. Greenthumb</b></span>
+			<a href="./index.php?option=perfil">Perfil</a>
+			<a href="./index.php?option=exit">Cerrar Sesi&oacute;n</a>-->
+		</div>
+
+	<div class="container">
+		<ul class="nav">
+		  <li class="active"><a data-toggle="tab" href="#status">Status</a></li>
+		  <li><a id="menu_link" data-toggle="tab" href="#clima">Search</a></li>
+		  <li><a id="menu_link" data-toggle="tab" href="#config">Configuration</a></li>
+		  <li><a id="menu_link" data-toggle="tab" href="#config">About</a></li>
+		</ul>
+
+<div id="wrapper">
+	<form method="get" action="">
+		<input type="text" id="df" value=""/> 
+		<input type="submit" value="Search" />
+	</form>
+</div><!-- #wrapper -->
+
+		<div class="result" id="result_main">
+			<div id="serv_data">
+				<ul>
+					<li id="ip"><a  href="./show.php?=the_ip">192.168.15.1</a></li>
+					<li id="cird_name">@Network Santa</li>
+					<li id="geo"><img width="15px" height="10px" src="img/flags/es.png">Spain, Madrid</li>
+					<li id="scan_date">Added on 05/6/1880</li>
+					<br>
+					<li id="os">Linux 3.0.15</li>
+					<li id="services">
+						<img width="25px" height="25px" src="img/icons/ssh.png" alt="SSH">
+						<img width="25px" height="25px" src="img/icons/http.png" alt="HTTP">
+						<img width="25px" height="25px" src="img/icons/https.png" alt="HTTPS">
+						<img width="25px" height="25px" src="img/icons/tor.png" alt="TOR">
+					</li>
+				</ul>
+			</div>
+			<div id="serv_finger">
+				<div id="finger_type">HTTP</div>
+					<textarea id="finger">HTTP/1.1 401
+Date: dasdasas
+khlkhklhsadkhasd
+</textarea>			
+			</div>
+
+			<div id="serv_finger">
+				<div id="finger_type">HTTPS (Reply)</div>
+					<textarea id="finger_cert">HTTP/1.1 401
+Date: dasdasas
+khlkhklhsadkhasd
+</textarea>			
+			</div>
+
+			<div id="serv_finger">
+				<div id="finger_type">HTTPS (SSL Cert)</div>
+					<textarea id="cert">HTTP/1.1 401
+Date: dasdasas
+khlkhklhsadkhasd
+</textarea>			
+			</div>
+	<div class="JennysecTables">
+                <table>
+                    <tr>
+                        <td>
+                            Title 1
+                        </td>
+                        <td >
+                            Title 2
+                        </td>
+                        <td>
+                            Title 3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Row 1
+                        </td>
+                        <td>
+                            Row 1
+                        </td>
+                        <td>
+                            Row 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Row 2
+                        </td>
+                        <td>
+                            Row 2
+                        </td>
+                        <td>
+                            Row 2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Row 2
+                        </td>
+                        <td>
+                            Row 2
+                        </td>
+                        <td>
+                            Row 2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Row 3
+                        </td>
+                        <td>
+                            Row 3
+                        </td>
+                        <td>
+                            Row 3
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            	
+
+
+		</div>
+	</div>
+
+	<div class="footer">
+		CopyLeft JennySec GPL (JennyCorp)
+	</div>
+</body>
+</html>
