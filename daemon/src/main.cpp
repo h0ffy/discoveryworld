@@ -1,5 +1,8 @@
 #include <bsd/bsd.h>
 #include <bsd/stdio.h>
+#include <bsd/stdlib.h>
+#include <bsd/libutil.h>
+//#include <unistd.h>
 #include "input.h"
 #include "config.h"
 #include "net_utils.h"
@@ -176,7 +179,7 @@ void initialize(void) {
 	umask(027);
 	chdir("/tmp/");
 	      
-	fd = open("/dev/null",O_RDWR, 0);
+	fd = NULL;//open("/dev/null",O_RDWR, 0);
 
 	if (fd != -1) 
 	{   

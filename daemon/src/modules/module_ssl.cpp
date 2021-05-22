@@ -2,14 +2,17 @@
 #include <bsd/string.h>
 #include <bsd/stdlib.h>
 #include <bsd/stdio.h>
+#include <mbedtls/entropy.h>
+#include <mbedtls/entropy_poll.h>
 #include <openssl/ssl.h> 
-#include <polarssl/config.h>
-#include <polarssl/net.h>
-#include <polarssl/ssl.h>
-#include <polarssl/entropy.h>
-#include <polarssl/ctr_drbg.h>
-#include <polarssl/error.h>
-#include <polarssl/certs.h>
+#include <mbedtls/config.h>
+#include <mbedtls/net.h>
+#include <mbedtls/ssl.h>
+#include <mbedtls/entropy.h>
+#include <mbedtls/ctr_drbg.h>
+#include <mbedtls/error.h>
+#include <mbedtls/certs.h>
+#include <mbedtls/compat-1.3.h>
 #include "../net_utils.h"
 #include "../config.h"
 #include "../misc.h"
@@ -40,8 +43,8 @@ ssl::ssl() {
    try {
      char *pers = (char *)"JennySSL";
      bzero(&this->ctx, sizeof(ssl_context));
-     bzero(&this->cacert, sizeof(x509_crt));
-     entropy_init(&this->entropy);
+     bzero(&this->cacert, sizeof(mbedtls_x509_crt));
+     mbedtls_entropy_init(&this->entropy);
      
      
      this->request = (unsigned char *)malloc(MAX_SSL_BUFF);
@@ -49,15 +52,19 @@ ssl::ssl() {
      bzero(this->request, MAX_SSL_BUFF);
      bzero(this->reply, MAX_SSL_BUFF);
      
-     if(ctr_drbg_init(&this->ctr_ctx,entropy_func,&this->entropy,(const unsigned char *)pers, strlen(pers))!=0)
-       throw 0;
-      
-     
-   }
+     mbedtls_ctr_drbg_init(&this->ctr_ctx); 
+     //,entropy_func,
+     mbedtls_entropy_init(&this->entropy); 
+		 //,(const unsigned char *)pers, strlen(pers)!=
+	   
+}
    catch(int iResult) {
       switch(iResult) {
 	case 0:
 	  __logging("ssl::ssl: Init crt instance\n");
+	  break;  
+	case 1:
+	  __logging("ssl::ssl: Init entropy\n");
 	  break;
 	default:
 	  __logging("ssl::ssl: Unknow error\n");
@@ -71,9 +78,9 @@ ssl::ssl() {
 }
 ssl::~ssl() {
     //x509_free( &cacert );
-    ssl_close_notify(&this->ctx);
-    net_close(this->sock);
-    ssl_free(&this->ctx);
+    mbedtls_ssl_close_notify(&this->ctx);
+    //net_close(this->sock);
+    mbedtls_ssl_free(&this->ctx);
     free(this->request);
     free(this->reply);
   
@@ -84,27 +91,29 @@ bool ssl::open(const char *ip,int port) {
     int handshake_status = 0, ctr_status=0;
     try {
   
-      if(net_connect(&this->sock,ip,port)!=0)
+      if(mbedtls_net_connect(&this->ctx_sock,ip,(const char *)port,MBEDTLS_NET_PROTO_TCP)!=0)
 	throw 0;
-  
-      if(ssl_init(&this->ctx)!=0)
-	throw 1;
+     
+
+      mbedtls_ssl_init(&this->ctx);
+      mbedtls_ssl_config_init(&this->ssl_conf);
+	
       
-      ssl_set_endpoint( &this->ctx, SSL_IS_CLIENT );
-      ssl_set_authmode( &this->ctx, SSL_VERIFY_OPTIONAL );
-      ssl_set_ca_chain( &this->ctx, &this->cacert, NULL, "JennySSL" );
-      ssl_set_rng( &this->ctx, ctr_drbg_random, &this->ctr_ctx );
-      //ssl_set_dbg( &this->ctx, my_debug, stdout );
-      ssl_set_bio( &this->ctx, net_recv, &this->sock,net_send, &this->sock );
+      mbedtls_ssl_conf_endpoint( &this->ssl_conf, SSL_IS_CLIENT );
+      mbedtls_ssl_conf_authmode( &this->ssl_conf, SSL_VERIFY_OPTIONAL );
+      mbedtls_ssl_conf_ca_chain( &this->ssl_conf, &this->cacert, NULL); // JennySSL
+      mbedtls_ssl_conf_rng( &this->ssl_conf, ctr_drbg_random, &this->ctr_ctx );
+      //mbedtls_set_dbg( &this->ctx, my_debug, stdout );
+      mbedtls_ssl_set_bio( &this->ctx, (void *)&this->sock,net_send,net_recv, NULL );
     
-      while((handshake_status=ssl_handshake(&this->ctx))!=0) {
-	 if(handshake_status!= POLARSSL_ERR_NET_WANT_READ && handshake_status != POLARSSL_ERR_NET_WANT_WRITE )
+      while((handshake_status=mbedtls_ssl_handshake(&this->ctx))!=0) {
+	 if(handshake_status!= MBEDTLS_ERR_SSL_WANT_READ && handshake_status != MBEDTLS_ERR_SSL_WANT_WRITE )
 	   throw 2;
       }
       
       
       //not available ssl cert integrity bug checking in v0.1 (added in v0.2 or v0.3)
-      if((ctr_status=ssl_get_verify_result(&this->ctx))!=0) {
+      if((ctr_status=mbedtls_ssl_get_verify_result(&this->ctx))!=NULL) {
         if((ctr_status & BADCERT_EXPIRED ) != 0 )
             __logging("SSL: %s:%d Expired Cert\n",ip,port);
         if((ctr_status & BADCERT_REVOKED ) != 0 )
@@ -151,8 +160,8 @@ int ssl::send(const unsigned char *data,int len) {
     bzero(this->request, MAX_SSL_BUFF);
     strlcpy((char *)this->request, (const char *)data, MAX_SSL_BUFF);
      
-    if((send_status = ssl_write(&this->ctx, data, len))<=0) {
-     if(send_status != POLARSSL_ERR_NET_WANT_READ && send_status != POLARSSL_ERR_NET_WANT_WRITE )
+    if((send_status = mbedtls_ssl_write(&this->ctx, data, len))<=0) {
+     if(send_status != MBEDTLS_ERR_SSL_WANT_READ && send_status != MBEDTLS_ERR_SSL_WANT_WRITE )
        throw 0;
     }
       
@@ -185,11 +194,11 @@ int ssl::recv() {
     //strlcpy(this->reply, data, MAX_SSL_BUFF); s
 //    data = this->reply;
     
-    recv_status = ssl_read(&this->ctx, this->reply, MAX_SSL_BUFF);
+    recv_status = mbedtls_ssl_read(&this->ctx, this->reply, MAX_SSL_BUFF);
     
-     if(recv_status== POLARSSL_ERR_NET_WANT_READ || recv_status == POLARSSL_ERR_NET_WANT_WRITE)
+     if(recv_status== MBEDTLS_ERR_SSL_WANT_READ || recv_status == MBEDTLS_ERR_SSL_WANT_WRITE)
 	return 1;
-     else if(recv_status == POLARSSL_ERR_SSL_PEER_CLOSE_NOTIFY)
+     else if(recv_status == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY)
 	throw 0;
      else if(recv_status < 0)
 	throw 1;

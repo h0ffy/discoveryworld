@@ -5,10 +5,12 @@
 
 class ssl {
 private:
-    ssl_context ctx;
-    x509_crt cacert;
-    entropy_context entropy;
-    ctr_drbg_context ctr_ctx;
+    mbedtls_ssl_context ctx;
+    mbedtls_net_context ctx_sock;
+    mbedtls_ssl_config ssl_conf;
+    mbedtls_x509_crt cacert;
+    mbedtls_entropy_context entropy;
+    mbedtls_ctr_drbg_context ctr_ctx;
     unsigned char *request;
     int sock;
   

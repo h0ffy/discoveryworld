@@ -6,8 +6,11 @@
 # 	extra/libbsd
 #
 
-CFLAGS = `mysql_config --cflags` --prefix=/opt --std=c++11
-LDFLAGS = -g -loping -lpthread -lpcap -ltinyxml2 -lpolarssl -lnet -lconfig -lGeoIP -lcrypto -lc++ -lbsd -lssh `mysql_config --libs` --enable-add-ons=libidn,nptl --enable-stackguard-randomization --enable-obsolete-rpc --prefix=/opt --enable-sanity-checks --enable-recursive-check
+CFLAGS = -v `mysql_config --cflags` --prefix=/opt --std=c++11
+LDFLAGS = -v -g -stdlib=libc++ -O2 -Werror -loping -lpthread -lpcap -ltinyxml2 -lmbedtls -lc++ -lnet -lconfig -lGeoIP -lcrypto -lbsd -lssh `mysql_config --libs` -lc++abi -lm -lc -lgcc_s -lgcc -lmbedx509 -lmbedcrypto
+
+nop = "--enable-stackguard-randomization --enable-obsolete-rpc --prefix=/opt --enable-sanity-checks --enable-recursive-check"
+
 OBJ_MAIN = obj/main.o obj/misc.o obj/output.o obj/input.o obj/discovery.o obj/config.o obj/threads.o obj/db.o obj/portscan.o obj/net_utils.o obj/services.o obj/netstatus.o obj/watchdog.o
 OBJ_TEST = obj/test.o obj/misc.o obj/output.o obj/input.o obj/discovery.o obj/config.o obj/threads.o obj/db.o obj/portscan.o obj/net_utils.o obj/services.o obj/netstatus.o obj/watchdog.o
 OBJ_MODULES = obj/modules/module_agent.o obj/modules/module_https.o obj/modules/module_ssh.o obj/modules/protocol_http.o obj/modules/module_ssl.o obj/modules/protocol_ftp.o obj/modules/protocol_whois.o obj/modules/protocol_smtp.o obj/modules/module_detector.o 
@@ -18,35 +21,36 @@ INCLUDE = src/
 EXE = bin/discoveryd
 TEST = bin/test
 CONF_FILE = etc/discoveryworld.conf
-CC = gcc
+CC = clang++-9
 INSTALLDIR = /opt/discoveryworld/bin
 CONFIGDIR = /opt/discoveryworld/etc
 LOGDIR = /var/log/discoveryworld
 
-all: $(EXE) $(TEST)
+all: $(EXE) 
+#$(TEST)
 
 obj/contrib/slre.o: src/contrib/slre.c
-	$(CC) -c --std=c11 -o $@ -I. -Isrc/contrib/ $<
+	$(CC) -c -std=c++11 -nostdinc++ -o $@ -I. -Isrc/contrib/ $<
 
-obj/main.o: 	src/main.cpp 
+obj/main.o: src/main.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
-obj/input.o: 	src/input.cpp
+obj/input.o: src/input.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
 obj/net_utils.o: src/net_utils.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
-obj/output.o: 	src/output.cpp
+obj/output.o: src/output.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
 obj/discovery.o: src/discovery.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
-obj/config.o: 	src/config.cpp
+obj/config.o: src/config.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
-obj/threads.o: 	src/threads.cpp
+obj/threads.o:	src/threads.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 
 obj/db.o:	src/db.cpp
@@ -98,23 +102,24 @@ obj/modules/module_detector.o: src/modules/module_detector.cpp
 obj/netstatus.o: src/netstatus.cpp
 	$(CC) -c $(CFLAGS) -o $@ -I$(INCLUDE) $<
 	
-	
-	
+
 
 $(EXE): $(OBJ)
 	$(CC) -o $@ $(LDFLAGS) $^
 
 #TEST
-$(TEST): $(OBJT)
-	$(CC) -o $@ $(LDFLAGS) $^
+#$(TEST): $(OBJT)
+#	$(CC) -o $@ $(LDFLAGS) $^
+
 
 
 clean:
 	rm $(OBJ)
 
+
 clean-all:
 	rm $(OBJ) $(EXE)
-	
+
 
 install:
 	install -d $(INSTALLDIR)

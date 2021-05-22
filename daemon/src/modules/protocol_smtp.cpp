@@ -3,7 +3,7 @@
 #include <bsd/stdlib.h>
 #include <bsd/stdio.h>
 #include <bsd/string.h>
-#include <polarssl/base64.h>
+#include <mbedtls/base64.h>
 #include <assert.h>
 #include "../config.h"
 #include "../misc.h"
