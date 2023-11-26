@@ -48,33 +48,50 @@ class CMSDiscovery:
 		command1_format1 = 'python dist/sublist3r.py -t %d -o /tmp/%s.txt -d 1 >/dev/null' % (self.domain,self.domain)
 		
 		try:
-		        commands.getoutput(command1_format1)
-		        f = open(output_file,'r')
-		        subdomains = f.readlines()		
-		        f.close()
-		        os.remove(output_file)
-			
+			commands.getoutput(command1_format1)
+			f = open(output_file,'r')
+			subdomains = f.readlines()		
+			f.close()
+			os.remove(output_file)
+		
 			for subdomain in subdomains:
 				ret.append(subdomain)
 
-		        return(ret)
+			return(ret)
 		except:
-		        pass
-		        ret=[]
-		
-		
-		        return(ret)
+			pass
+			ret=[]		
+			return(ret)
 		
 #Implementation WhatWeb Class GPL
 	def whweb(self):
-	  try:
-	    wh = WhatWeb(self.url)
-	    wh.run()
-	    self.whversion = wh.result
-	    return(wh.result)
-	  
-	  except:
-	     pass
+		try:
+			wh = WhatWeb(self.url)
+			wh.run()
+			self.whversion = wh.result
+			return(wh.result)	
+		except:
+			pass
 	   
-	  return(0)
+		return(0)
 
+
+# New:
+	#https://code.google.com/archive/p/cms-explorer/downloads
+	#xcms.py
+	#https://github.com/GONZOsint/WhatCMS
+	#pyfiscan // https://github.com/fgeek/pyfiscan
+	#cmseek
+	#https://github.com/MadExploits/CMS-Detect
+	#https://github.com/n4xh4ck5/CMSsc4n
+	#https://github.com/oways/cms-checker
+	#https://github.com/diphost/cmsfinder
+	#https://github.com/JamesDooley/VersionFinder
+	#cmsmap // https://github.com/Dionach/CMSmap
+	#webtech // https://github.com/ShielderSec/webtech
+	#https://github.com/mihneamanolache/WebChecker
+	#https://github.com/s0md3v/ReconDog
+
+
+#selenium & hook & wintools etc...
+	#https://github.com/s0md3v/Striker
